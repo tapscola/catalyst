@@ -1,0 +1,12 @@
+name = DB User
+description = Manages the user registration and login system.
+package = DB User
+version = VERSION
+core = 7.x
+files[] = db_user.module
+
+; Information added by drupal.org packaging script on 2013-04-03
+version = "7.22"
+project = "drupal"
+datestamp = "1365027012"
+
