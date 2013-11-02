@@ -1,0 +1,18 @@
+<?php
+/**
+ * Maximum length of username text field.
+ */
+define('DB_USERNAME_MAX_LENGTH', 60);
+
+/**
+ * Maximum length of user e-mail text field.
+ */
+define('DB_EMAIL_MAX_LENGTH', 254);
+
+/**
+ * Implements hook_init().
+ */
+function db_user_init() {
+  drupal_add_js(drupal_get_path('module', 'db_user') .'/js/db_user.js');
+  drupal_add_css(drupal_get_path('module', 'db_user') .'/css/db_user.css');
+}
