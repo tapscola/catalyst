@@ -1,0 +1,44 @@
+<?php
+
+/*
+ * Implementation of hook_schema()
+ */
+function db_user_schema() {
+  $schema['db_user'] = array(
+    'description' => 'db_user data.',
+    'fields' => array(
+      'id' => array(
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => 'Primary Key: Unique id.',
+      ),
+      'name' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+        'description' => 'Name.',
+      ),
+      'email' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+        'description' => 'Email.',
+      ),
+      'password' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+        'description' => 'Password.',
+      ),
+      
+      
+    ),
+    'primary key' => array('id'),
+  );
+
+  return $schema;
+}
