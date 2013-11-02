@@ -1,0 +1,23 @@
+#db-user-form {
+	margin-left:5px;
+}
+
+#db-user-form .short{
+	color:#FF0000;
+}
+
+#db-user-form .weak{
+	color:#E66C2C;
+}
+
+#db-user-form .good{
+	color:#2D98F3;
+}
+
+#db-user-form .strong{
+	color:#006400;
+}
+
+.form-item-pass {float: left;}
+#result {float: left; padding: 26px 0 0 10px;}
+#db-user-form #edit-submit {clear: both; float: left;}
