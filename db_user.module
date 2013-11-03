@@ -78,3 +78,16 @@ function db_user_form ($form, $form_state) {
   $form['submit'] = array('#type' => 'submit', '#value' => t('Save'));
   return $form;
 }
+function db_user_form_submit($form, $form_state) {
+  $name = $form_state['values']['name'];
+  $email = $form_state['values']['mail'];
+  $password = $form_state['values']['pass'];
+  $result = db_insert('db_user')
+      ->fields(array(
+         'name' => $name,
+         'email' => $email,
+         'password' => $password,
+        ))
+         ->execute();
+  drupal_set_message(t('You data has been saved now.'), $type = 'status');
+}
