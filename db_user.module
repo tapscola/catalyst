@@ -16,3 +16,65 @@ function db_user_init() {
   drupal_add_js(drupal_get_path('module', 'db_user') .'/js/db_user.js');
   drupal_add_css(drupal_get_path('module', 'db_user') .'/css/db_user.css');
 }
+
+/**
+ * Implements hook_menu().
+ */
+function db_user_menu() {
+  $items['db_user/register'] = array(
+    'type' => MENU_CALLBACK,
+    'title' => t('Custom Form Page'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('db_user_form'),
+    'access arguments' => array('access content'),
+ );
+ return($items);
+}
+
+/**
+ * Helper function to add default user account fields to user registration and edit form.
+ *
+ * @see user_account_form_validate()
+ * @see user_validate_current_pass()
+ * @see user_validate_picture()
+ * @see user_validate_mail()
+ */
+function db_user_form ($form, $form_state) {
+  $form['#attached']['js'][] = drupal_get_path('module', 'user') . '/user.js';
+  $form['db_user_account']['name'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Name'),
+    '#maxlength' => DB_USERNAME_MAX_LENGTH,
+    '#description' => t('Spaces are allowed; punctuation is not allowed except for periods, hyphens, apostrophes, and underscores.'),
+    '#required' => TRUE,
+    '#attributes' => array('class' => array('username')),
+    '#weight' => 0,
+  );
+
+  $form['db_user_account']['mail'] = array(
+    '#type' => 'textfield',
+    '#title' => t('E-mail address'),
+    '#maxlength' => DB_EMAIL_MAX_LENGTH,
+    '#description' => t('A valid e-mail address. All e-mails from the system will be sent to this address. The e-mail address is not made public and will only be used if you wish to receive a new password or wish to receive certain news or notifications by e-mail.'),
+    '#required' => TRUE,
+    '#weight' => 1,
+  );
+	$form['db_user_account']['pass'] = array(
+	'#type' => 'password',
+	'#title' => t('password'),
+	'#size' => 25,
+  '#required' => TRUE,
+	'#description' => 'Enter password',
+	'#weight' => 2,
+	'#attributes' => array('autocomplete' => 'off'),
+  );
+  
+  $form['db_user_account']['result'] = array(
+    '#type' => 'markup',
+    '#weight' => 3,
+    '#markup' => '<span class="good" id="result">Good</span>',
+  );
+  
+  $form['submit'] = array('#type' => 'submit', '#value' => t('Save'));
+  return $form;
+}
