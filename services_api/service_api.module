@@ -1,0 +1,86 @@
+<?php
+
+/**
+ * Implements hook_services_resources().
+ */
+function service_api_services_resources() {
+  $api = array(
+    'node_service' => array(
+      'operations' => array(
+        'retrieve' => array(
+          'help' => 'Create custom node',
+          'callback' => '_service_api_node_service_retrieve',
+          'access callback' => 'user_access',
+          'access arguments' => array('access content'),
+          'access arguments append' => FALSE,
+          'args' => array(
+            array(
+              'name' => 'fn',
+              'type' => 'string',
+              'description' => 'Function to perform',
+              'source' => array('path' => '0'),
+              'optional' => TRUE,
+              'default' => '0',
+            ),
+            array(
+              'name' => 'title',
+              'type' => 'string',
+              'description' => 'Node title',
+              'source' => array('param' => 'title'),
+              'optional' => TRUE,
+              'default' => '0',
+            ),
+            array(
+              'name' => 'body',
+              'type' => 'string',
+              'description' => 'Node Body',
+              'source' => array('param' => 'body'),
+              'optional' => TRUE,
+              'default' => '0',
+            ),
+            array(
+              'name' => 'term',
+              'type' => 'string',
+              'description' => 'Taxonomy term name',
+              'source' => array('param' => 'term'),
+              'optional' => FALSE,
+              'default' => '0',
+            ),
+          ),
+        ),
+      ),
+    ),
+  );
+ return $api;
+}
+
+/**
+ * Implements callback for hook_services_resources().
+ */
+function _service_api_node_service_retrieve($fn, $title, $body, $term) {
+  return service_api_find_api_service_items($title, $body, $term);
+}
+
+/**
+ * Implements for insert node().
+ */
+function service_api_find_api_service_items($title, $body, $term) {
+  $node = new stdClass();
+  $node->title = $title;
+  $node->type = "custom";
+  node_object_prepare($node);
+  $node->language = LANGUAGE_NONE;
+  $node->uid = 1;
+  $node->status = 1;
+  $node->promote = 0;
+  $node->comment = 1;
+  $node->body[$node->language][0]['value']   = $body;
+  if($term) {
+      $tid = array_keys(taxonomy_get_term_by_name($term));
+      $node->field_custom_term[$node->language][]['tid'] = $tid[0];
+  }
+  node_save($node);
+  $last_id = db_query('SELECT MAX(nid) FROM {node} WHERE type = :type', array(':type' => 'custom'))->fetchField();
+  $items = array('nid' => $last_id);
+  return $items; 
+}
